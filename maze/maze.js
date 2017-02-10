@@ -1,5 +1,5 @@
 import Grid from './grid';
-import BlockValidator from './block-validator';
+// import BlockValidator from './block-validator';
 import Stringifier from './stringifier';
 import {oppositeDirection, shuffleDirections} from './directions';
 
@@ -17,13 +17,11 @@ class Maze extends Grid {
 
     this.pathWidth = parseInt(pathWidth, 10) || 1;
     this.pathHeight = parseInt(pathHeight, 10) || 1;
-    this.validator = new BlockValidator(this);
   }
 
-  // Check whether or not a block is valid base on the configuration.
-  // Default is in the grid and has all the walls.
+  // Check whether or not a block is valid.
   isValidBlock (x, y) {
-    return this.validator.unCave(x, y);
+    return this.isBlockInGrid(x, y);
   }
 
   // Convert the maze to a string which can be used to print the maze.

@@ -9,24 +9,31 @@ class RecursiveBacktracking {
   }
 
   carve (cx, cy) {
+    let maze = this.maze;
+
     // Randomize the directions to carve.
     let directions = Directions.shuffleDirections(
-      this.maze.getWallsForBlock(cx, cy)
+      maze.getWallsForBlock(cx, cy)
     );
 
     for (let direct of directions) {
       // Get the next location.
-      let nx = this.maze.nextX(cx, direct);
-      let ny = this.maze.nextY(cy, direct);
+      let nx = maze.nextX(cx, direct);
+      let ny = maze.nextY(cy, direct);
 
-      if (this.maze.isValidBlock(nx, ny)) {
+      if (this.isValidBlock(nx, ny)) {
         // Update the value for the block with the direction.
-        this.maze.setCarvedDirection(cx, cy, direct);
-        this.maze.setCarvedDirection(nx, ny, Directions.oppositeDirection(direct));
+        maze.setCarvedDirection(cx, cy, direct);
+        maze.setCarvedDirection(nx, ny, Directions.oppositeDirection(direct));
 
         this.carve(nx, ny);
       }
     }
+  }
+
+  isValidBlock (nx, ny) {
+    let maze = this.maze;
+    return maze.isValidBlock(nx, ny) && maze.getBlockValue(nx, ny) === 0;
   }
 }
 
