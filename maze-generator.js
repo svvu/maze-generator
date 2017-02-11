@@ -1,38 +1,90 @@
 require('babel-core/register');
+
+const commandLineArgs = require('command-line-args');
+const commandLineUsage = require('command-line-usage');
 const Maze = require('./maze/maze.js').default;
 const RecursiveBacktracking = require('./generate_algorithms/recursive-backtracking.js').default;
 
+const optionDefinitions = [
+  { name: 'help', type: Boolean, defaultValue: false },
+  { name: 'width', alias: 'w', type: Number, defaultValue: 10 },
+  { name: 'height', alias: 'h', type: Number, defaultValue: 10 },
+  { name: 'pathWidth', type: Number, defaultValue: 1 },
+  { name: 'pathHeight', type: Number, defaultValue: 1 },
+  { name: 'braided', alias: 'b', type: Boolean, defaultValue: false }
+];
+
+const optionsDef = [
+  {
+    header: 'A typical app',
+    content: 'Generates a maze with pass in options.'
+  },
+  {
+    header: 'Options',
+    optionList: [
+      {
+        name: 'help',
+        description: 'Print this options list.'
+      },
+      {
+        name: 'width',
+        type: Number,
+        alias: 'w',
+        description: 'The width (vertical path) of the maze.'
+      },
+      {
+        name: 'height',
+        type: Number,
+        alias: 'h',
+        description: 'The height (horizontal path) of the maze.'
+      },
+      {
+        name: 'pathWidth',
+        type: Number,
+        description: 'The width of the path for the maze.'
+      },
+      {
+        name: 'pathHeight',
+        type: Number,
+        description: 'The height of the path for the maze.'
+      },
+      {
+        name: 'braided',
+        type: Boolean,
+        alias: 'b',
+        description: 'The maze generated is braided (no dead end) or not.'
+      }
+    ]
+  }
+];
+
 function main () {
-  let width = process.argv[2] || 10;
-  let height = process.argv[3] || 10;
-  let pathWidth = process.argv[4] || 1;
-  let pathHeight = process.argv[5] || 1;
+  let options = commandLineArgs(optionDefinitions);
 
-  let errMsg = 'please provide valid number by "node maze-generator.js width height pathWidth pathHeight"';
-  if (isNaN(width) || width <= 0) {
-    console.log(`Invalid width, ${errMsg}`);
-    return;
-  }
-  if (isNaN(height) || height <= 0) {
-    console.log(`Invalid height, ${errMsg}`);
+  if (options.help) {
+    console.log(commandLineUsage(optionsDef));
     return;
   }
 
-  if (isNaN(pathWidth) || pathWidth <= 0) {
-    console.log(`Invalid path width, ${errMsg}`);
+  if (isNaN(options.width) || options.width <= 0) {
+    console.log('Invalid width');
     return;
   }
-  if (isNaN(pathHeight) || pathHeight <= 0) {
-    console.log(`Invalid path height, ${errMsg}`);
+  if (isNaN(options.height) || options.height <= 0) {
+    console.log('Invalid height');
     return;
   }
 
-  let maze = new Maze({
-    width: width,
-    height: height,
-    pathWidth: pathWidth,
-    pathHeight: pathHeight
-  });
+  if (isNaN(options.pathWidth) || options.pathWidth <= 0) {
+    console.log('Invalid path width');
+    return;
+  }
+  if (isNaN(options.pathHeight) || options.pathHeight <= 0) {
+    console.log('Invalid path height');
+    return;
+  }
+
+  let maze = new Maze(options);
   let rb = new RecursiveBacktracking(maze);
   rb.carve(0, 0);
   console.log(maze.toString());

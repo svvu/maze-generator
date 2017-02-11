@@ -12,11 +12,17 @@ class Maze extends Grid {
     };
   }
 
-  constructor ({width = 1, height = 1, pathWidth = 1, pathHeight = 1} = {}) {
+  constructor (
+    {
+      width = 1, height = 1, pathWidth = 1, pathHeight = 1,
+      braided = false
+    } = {}
+  ) {
     super(width, height);
 
     this.pathWidth = parseInt(pathWidth, 10) || 1;
     this.pathHeight = parseInt(pathHeight, 10) || 1;
+    this.braided = braided;
   }
 
   // Check whether or not a block is valid.
