@@ -3,11 +3,22 @@ A maze generator use recursive backtracking algorithm to generate a maze.
 
 To run the code
 ``` javascript
-node maze-generator.js mazeWidth mazeHeight pathWidth pathWidth
+node maze-generator.js -w 5 -h 5 -W 3 -H 2 -v
 ```
+or
+``` javascript
+node maze-generator.js --width 5 --height 5 --pathWidth 3 --pathHeight 2 --weave
+```
+List all available arguments
+``` javascript
+node maze-generator.js --help
+```
+
+# Example
+
 Default pathWidth and pathWidth are 1
 
-Example output for a 10 X 10 maze.
+## Example output for a 10 X 10 maze.
 ```
  _   _________________   _____   _____
 | | |  _____________  | |  _  | |  ___|
@@ -31,10 +42,7 @@ Example output for a 10 X 10 maze.
 |_____________| |_________________| |_|
 ```
 
-To Create a maze with path width 3 and height 2.
-``` javascript
-node maze-generator.js 10 10 3 2
-```
+## A maze with path width 3 and height 2.
 ```
  ___________________________   ___________________________
 |                           | |                           |
@@ -66,4 +74,47 @@ node maze-generator.js 10 10 3 2
 |   |_______|   |_______|   | |   |_____________|   |_|   |
 |                           | |                           |
 |___________________________| |___________________________|
+```
+
+## Braided Maze
+```
+ _____________   _____________________
+|  _   _   _  | |  _____________   _  |
+| |_| |_| | | |_| |___   _______| | | |
+|  _   _  | |  _   _  | |  _   _  | | |
+| | | | | |_| | | |_| |_| | | |_| |_| |
+| | | | |  _  | |___   _  | |  _   _  |
+| |_| | | |_| |___  | |_| | | | | | | |
+|  _  | |  _____  | |  _  | | | | | | |
+| | | | | |___  | | | | | |_| | | |_| |
+| | | | |  _  | | | | | |  ___| |  _  |
+| |_| | | |_| | | |_| | | |_____| |_| |
+|  _  | |  _  | |  ___| |___   _____  |
+| | | |_| |_| |_| |_________| |  ___| |
+| | |___   _   _   _________  | |  _  |
+| |  ___| |_| | | |___   ___| |_| |_| |
+| | |  _____  | |  _  | |  _________  |
+| | | |___  | | | | | |_| |_________| |
+| | |  _  | | | | | |___   _   _   _  |
+| |_| |_| | | |_| |_____| | | |_| |_| |
+|_________| |_____________| |_________|
+```
+
+## Weave maze
+```
+ _______________   _________
+|               | |         |
+|_____     _    | |    _    |
+ _____|___|_|   | |   | |   |
+|               | |   | |   |
+|    ___________| |___| |   |
+|   |_|   |  _________  |   |
+|         | |         | |   |
+|_____    | |    _    | |   |
+ ___  |   |_|___|_|   | |   |
+|   | |               | |   |
+|   | |_______________| |   |
+|   |_______|   |_______|   |
+|                           |
+|___________________________|
 ```
