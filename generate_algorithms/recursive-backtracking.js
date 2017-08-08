@@ -17,42 +17,63 @@ class RecursiveBacktracking {
     );
 
     for (let direct of directions) {
-      let nextBlock = this._getNextBlock(cx, cy, direct);
+      this._carveBlockInDirection(cx, cy, direct);
+    }
+  }
 
-      if (nextBlock.validBlock) {
-        let nx = nextBlock.x;
-        let ny = nextBlock.y;
+  _carveBlockInDirection (cx, cy, direction) {
+    let nextBlock = this._getNextBlock(cx, cy, direction);
 
-        // Break the wall to next block.
-        maze.setCarvedDirection(cx, cy, direct);
-        maze.setCarvedDirection(nx, ny, Directions.oppositeDirection(direct));
-        // Whether or not should keeo going.
-        if (nextBlock.canGoForward) {
-          this.carve(nx, ny);
-        }
+    if (nextBlock.validBlock) {
+      // Break the wall to next block.
+      this.maze.setCarvedDirection(cx, cy, direction);
+      this.maze.setCarvedDirection(
+        nextBlock.x, nextBlock.y, Directions.oppositeDirection(direction)
+      );
+
+      // Whether or not should keeo going.
+      if (nextBlock.canGoForward) {
+        this.carve(nextBlock.x, nextBlock.y);
       }
     }
   }
 
   _getNextBlock (cx, cy, direction) {
     let maze = this.maze;
-    let nextBlock = {validBlock: false};
 
     // Get the next location.
     let nx = maze.nextX(cx, direction);
     let ny = maze.nextY(cy, direction);
+    let nextBlock = {
+      x: nx,
+      y: ny,
+      direction: direction,
+      validBlock: false,
+      canGoForward: false
+    };
 
     if (this._isUncarveBlock(nx, ny)) {
-      nextBlock = {
-        validBlock: true, x: nx, y: ny, direction: direction, canGoForward: true
-      };
-    } else if (maze.braided && this._isValidBlockForBraided(cx, cy, nx, ny)) {
-      nextBlock = {
-        validBlock: true, x: nx, y: ny, direction: direction, canGoForward: false
-      };
+      nextBlock.validBlock = nextBlock.canGoForward = true;
+    } else if (maze.weave && this._canGoUnderNextBlock(cx, cy, nx, ny, direction)) {
+      nextBlock = this._getNextWeaveBlock(nx, ny, direction);
+    } else if (maze.braided && this._canConnectNextBlockForBraided(cx, cy, nx, ny)) {
+      nextBlock.validBlock = true;
     }
 
     return nextBlock;
+  }
+
+  _getNextWeaveBlock (cx, cy, direction) {
+    let nx = this.maze.nextX(cx, direction);
+    let ny = this.maze.nextY(cy, direction);
+
+    return {
+      x: nx,
+      y: ny,
+      direction: direction,
+      validBlock: this._isValidBlock(nx, ny),
+      canGoForward: this._isUncarveBlock(nx, ny)
+    };
   }
 
   _isValidBlock (x, y) {
@@ -63,14 +84,13 @@ class RecursiveBacktracking {
     return this._isValidBlock(x, y) && this.maze.getBlockValue(x, y) === 0;
   }
 
-  _isValidBlockForBraided (cx, cy, nx, ny) {
-    return this._isValidBlock(nx, ny) && this._isDeadEnd(cx, cy);
+  _canConnectNextBlockForBraided (cx, cy, nx, ny) {
+    return this._isValidBlock(nx, ny) && this.maze.isDeadEnd(cx, cy);
   }
 
-  _isDeadEnd (x, y) {
-    // If there's only one path to the current block, and next block is invalid,
-    // then the current block will be an dead end.
-    return this.maze.getWallsForBlock(x, y).length >= 3;
+  _canGoUnderNextBlock (cx, cy, nx, ny, direction) {
+    return this._isValidBlock(nx, ny) && this.maze.isDeadEnd(cx, cy) &&
+            this.maze.hasWallInDirection(nx, ny, direction);
   }
 }
 

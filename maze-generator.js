@@ -9,9 +9,10 @@ const optionDefinitions = [
   { name: 'help', type: Boolean, defaultValue: false },
   { name: 'width', alias: 'w', type: Number, defaultValue: 10 },
   { name: 'height', alias: 'h', type: Number, defaultValue: 10 },
-  { name: 'pathWidth', type: Number, defaultValue: 1 },
-  { name: 'pathHeight', type: Number, defaultValue: 1 },
-  { name: 'braided', alias: 'b', type: Boolean, defaultValue: false }
+  { name: 'pathWidth', alias: 'W', type: Number, defaultValue: 1 },
+  { name: 'pathHeight', alias: 'H', type: Number, defaultValue: 1 },
+  { name: 'braided', alias: 'b', type: Boolean, defaultValue: false },
+  { name: 'weave', alias: 'v', type: Boolean, defaultValue: false }
 ];
 
 const optionsDef = [
@@ -41,11 +42,13 @@ const optionsDef = [
       {
         name: 'pathWidth',
         type: Number,
+        alias: 'W',
         description: 'The width of the path for the maze.'
       },
       {
         name: 'pathHeight',
         type: Number,
+        alias: 'H',
         description: 'The height of the path for the maze.'
       },
       {
@@ -53,6 +56,12 @@ const optionsDef = [
         type: Boolean,
         alias: 'b',
         description: 'The maze generated is braided (no dead end) or not.'
+      },
+      {
+        name: 'weave',
+        type: Boolean,
+        alias: 'v',
+        description: 'The maze generated is weave (path can go under other path) or not.'
       }
     ]
   }
