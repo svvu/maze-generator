@@ -21,18 +21,6 @@ class Grid {
     }
   }
 
-  // Check whether or not the block is out of grid.
-  isBlockInGrid (x, y) {
-    let validX = x >= 0 && x < this.width;
-    let validY = y >= 0 && y < this.height;
-    return validX && validY;
-  }
-
-  // Set the carve direction for the block.
-  setCarvedDirection (x, y, direction) {
-    this.blocks[y][x] |= direction;
-  }
-
   // Get the next x coordinate.
   nextX (cx, direction) {
     switch (direction) {
@@ -68,6 +56,13 @@ class Grid {
     return [N, S, E, W].filter((v) => {
       return !(block & v);
     });
+  }
+
+  // Check whether or not the block is out of grid.
+  isBlockInGrid (x, y) {
+    let validX = x >= 0 && x < this.width;
+    let validY = y >= 0 && y < this.height;
+    return validX && validY;
   }
 
   // Fill the grid with default value 0.
